@@ -1,4 +1,5 @@
 ﻿#include "nddsetting.h"
+#include "qt6compat.h"
 #include <QObject>
 #include <QtDebug>
 #include <QCoreApplication>
@@ -50,7 +51,7 @@ void NddSetting::init()
 	QString qsSetPath = qs.fileName();
 
 	s_nddSet = new QSettings(QSettings::IniFormat, QSettings::UserScope, settingDir);
-	s_nddSet->setIniCodec("UTF-8");
+	setIniCodecUtf8(s_nddSet);
 	bool initOk = true;
 
 	auto initNddSet = []() {
@@ -345,7 +346,7 @@ void NddSetting::nddDelaySetInit()
 		QString qsSetPath = qs.fileName();
 
 		s_nddDelaySet = new QSettings(QSettings::IniFormat, QSettings::UserScope, settingDir);
-		s_nddDelaySet->setIniCodec("UTF-8");
+		setIniCodecUtf8(s_nddDelaySet);
 	}
 }
 

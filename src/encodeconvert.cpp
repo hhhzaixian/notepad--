@@ -2,6 +2,7 @@
 #include "rcglobal.h"
 #include "CmpareMode.h"
 #include "doctypelistview.h"
+#include "qt6compat.h"
 
 #include <QFileDialog>
 #include <QTreeWidgetItem>

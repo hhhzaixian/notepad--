@@ -1,5 +1,5 @@
 ﻿#include "Encode.h"
-#include <QTextCodec>
+#include "qt6compat.h"
 #include <QtDebug>
 
 /* 检查字符串编码的类。看了大量文献，结论如下：

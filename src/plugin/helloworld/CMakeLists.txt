@@ -5,7 +5,14 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Concurrent Network PrintSupport XmlPatterns)
+# 支持 Qt6 和 Qt5
+find_package(Qt6 COMPONENTS Core Gui Widgets Concurrent Network PrintSupport Core5Compat QUIET)
+if(NOT Qt6_FOUND)
+    find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets Concurrent Network PrintSupport XmlPatterns)
+    set(QT_VERSION_MAJOR 5)
+else()
+    set(QT_VERSION_MAJOR 6)
+endif()
 
 add_definitions(-D_UNICODE -DUNICODE)
 
@@ -31,7 +38,11 @@ ${PROJECT_SOURCE_DIR}/../../qscint/scintilla/lexlib
 ${PROJECT_SOURCE_DIR}/../../qscint/scintilla/boostregex
 )
 
-target_link_libraries(${PROJECT_NAME} qscint Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Concurrent Qt5::Network  Qt5::PrintSupport Qt5::XmlPatterns)
+if(QT_VERSION_MAJOR EQUAL 6)
+    target_link_libraries(${PROJECT_NAME} qscint Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Concurrent Qt6::Network Qt6::PrintSupport Qt6::Core5Compat)
+else()
+    target_link_libraries(${PROJECT_NAME} qscint Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Concurrent Qt5::Network Qt5::PrintSupport Qt5::XmlPatterns)
+endif()
 
 # if(NOT DEFINED ${notepad--_BINARY_DIR})
 # set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${notepad--_BINARY_DIR}/bin/plugin)

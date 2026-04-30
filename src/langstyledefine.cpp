@@ -1,6 +1,7 @@
 #include "langstyledefine.h"
 #include "userlexdef.h"
 #include "extlexermanager.h"
+#include "qt6compat.h"
 
 #include <QInputDialog>
 #include <QMessageBox>
@@ -30,7 +31,7 @@ bool LangStyleDefine::readLangSetFile(QString langName, bool isLoadToUI)
 {
 	QString userLangFile = QString("notepad/userlang/%1").arg(langName);//自定义语言中不能有.字符，否则可能有错，后续要检查
 	QSettings qs(QSettings::IniFormat, QSettings::UserScope, userLangFile);
-	qs.setIniCodec("UTF-8");
+	SET_INI_CODEC_UTF8(qs);
 	qDebug() << qs.fileName();
 
 	if (!qs.contains("mz"))
@@ -160,7 +161,7 @@ void LangStyleDefine::slot_save()
 	//把新语言tagName,和关联ext单独存放起来。后面只读取一个文件就能获取所有，避免遍历慢
 	QString extsFile = QString("notepad/userlang/ext_tag");//ext_tag是存在所有tag ext的文件
 	QSettings qs(QSettings::IniFormat, QSettings::UserScope, extsFile);
-	qs.setIniCodec("UTF-8");
+	SET_INI_CODEC_UTF8(qs);
 
 	QStringList extList = ui.extNameLe->text().trimmed().split(" ");
 	extList.append(QString::number(motherLangs)); //最后一个是mother lexer
@@ -201,7 +202,7 @@ void LangStyleDefine::slot_delete()
 	{
 		QString userLangFile = QString("notepad/userlang/%1").arg(name);//自定义语言中不能有.字符，否则可能有错，后续要检查
 		QSettings qs(QSettings::IniFormat, QSettings::UserScope, userLangFile);
-		qs.setIniCodec("UTF-8");
+		SET_INI_CODEC_UTF8(qs);
 
 		//删除userlang下面的tag.ini
 		QFile::remove(qs.fileName());
@@ -211,7 +212,7 @@ void LangStyleDefine::slot_delete()
 		//把新语言在ext_tag中的关联文件记录也删除
 		QString extsFile = QString("notepad/userlang/ext_tag");//ext_tag是存在所有tag ext的文件
 		QSettings qs(QSettings::IniFormat, QSettings::UserScope, extsFile);
-		qs.setIniCodec("UTF-8");
+		SET_INI_CODEC_UTF8(qs);
 
 		QStringList extList = qs.value(name).toStringList();
 		//更新当前ExtLexerManager::getInstance()。如果不更新，就要重启软件才能生效

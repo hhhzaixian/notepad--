@@ -1,10 +1,10 @@
 ﻿#include "ccnotepad.h"
 #include "nddsetting.h"
 #include "styleset.h"
+#include "qt6compat.h"
 
 
 #include <QtWidgets/QApplication>
-#include <QTextCodec>
 #include <QMessageBox>
 #include <QSharedMemory>
 #include <QFile>
@@ -23,10 +23,18 @@
 
 #ifdef Q_OS_WIN
 #pragma comment(lib, "user32.lib")
-#if _DEBUG
-#pragma comment(lib, "qmyedit_qt5d.lib")
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    #if _DEBUG
+    #pragma comment(lib, "qmyedit_qt6d.lib")
+    #else
+    #pragma comment(lib, "qmyedit_qt6.lib")
+    #endif
 #else
-#pragma comment(lib, "qmyedit_qt5.lib")
+    #if _DEBUG
+    #pragma comment(lib, "qmyedit_qt5d.lib")
+    #else
+    #pragma comment(lib, "qmyedit_qt5.lib")
+    #endif
 #endif
 #include <qt_windows.h>
 const ULONG_PTR CUSTOM_TYPE = 10000;

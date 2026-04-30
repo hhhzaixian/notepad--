@@ -1,6 +1,7 @@
 ﻿#include "shortcutkeymgr.h"
 #include "shortcutkeyeditwin.h"
 #include "ccnotepad.h"
+#include "qt6compat.h"
 
 #include <QTableWidgetItem>
 #include <QSettings>
@@ -154,7 +155,7 @@ void ShortcutKeyMgr::loadUserDefSet()
 {
 	QString userDefFile = QString("notepad/shortcuttab");
 	QSettings qs(QSettings::IniFormat, QSettings::UserScope, userDefFile);
-	qs.setIniCodec("UTF-8");
+	SET_INI_CODEC_UTF8(qs);
 
 	QStringList keys = qs.allKeys();
 
@@ -179,7 +180,7 @@ bool ShortcutKeyMgr::ModifyShortCutKey(QString initTag, QString keySeqStr)
 {
 	QString userDefFile = QString("notepad/shortcuttab");
 	QSettings qs(QSettings::IniFormat, QSettings::UserScope, userDefFile);
-	qs.setIniCodec("UTF-8");
+	SET_INI_CODEC_UTF8(qs);
 
 	if (s_shortcutKeysMap->contains(initTag))
 	{

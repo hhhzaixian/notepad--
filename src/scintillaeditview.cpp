@@ -9,6 +9,7 @@
 #include "filemanager.h"
 #include "shortcutkeymgr.h"
 #include "markdownview.h"
+#include "qt6compat.h"
 
 #include <Scintilla.h>
 #include <SciLexer.h>
@@ -2296,10 +2297,17 @@ void ScintillaEditView::showWordNums()
 		}
 
 			//\s是包含了换行符的，所有要单独统计\r\n换换行符，排除一下
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			QRegularExpression warpRe("[\r\n]");
+			int wrapNums = word.count(warpRe);
+			QRegularExpression bkRe("\\s");
+			int blank = word.count(bkRe);
+#else
 			QRegExp warpRe("[\r\n]");
 			int wrapNums = word.count(warpRe);
 			QRegExp bkRe("\\s");
 			int blank = word.count(bkRe);
+#endif
 			QMessageBox::about(this, tr("Word Nums"), tr("Current Select Word Nums is %1 . \nLine nums is %2 . \nSpace nums is %3, Non-space is %4 .").\
 				arg(word.size()-wrapNums).arg(lineNum).arg(blank-wrapNums).arg(word.size()-blank));
 	}
@@ -2310,10 +2318,17 @@ void ScintillaEditView::showWordNums()
 		QString text = this->text();
 
 		//\s是包含了换行符的，所有要单独统计\r\n换换行符，排除一下
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		QRegularExpression warpRe("[\r\n]");
+		int wrapNums = text.count(warpRe);
+		QRegularExpression bkRe("\\s");
+		int blank = text.count(bkRe);
+#else
 		QRegExp warpRe("[\r\n]");
 		int wrapNums = text.count(warpRe);
 		QRegExp bkRe("\\s");
 		int blank = text.count(bkRe);
+#endif
 
 		QMessageBox::about(this, tr("Word Nums"), tr("Current Doc Word Nums is %1 . \nLine nums is %2 . \nSpace nums is %3, Non-space is %4 .").\
 			arg(text.size() - wrapNums).arg(lineNum).arg(blank - wrapNums).arg(text.size() - blank));
@@ -3424,7 +3439,7 @@ bool isUrlQueryDelimiter(QChar const c)
 void scanToUrlEnd(QString & text, int textLen, int start, int* distance)
 {
 	int p = start;
-	QChar q = 0;
+	QChar q = QChar('\0');
 	enum { sHostAndPath, sQuery, sQueryAfterDelimiter, sQueryQuotes, sQueryAfterQuotes, sFragment } s = sHostAndPath;
 	while (p < textLen)
 	{

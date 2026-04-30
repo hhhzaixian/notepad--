@@ -24,6 +24,14 @@
 #include <qcolor.h>
 #include <qfont.h>
 #include <qsettings.h>
+#include <QtGlobal>
+
+// Qt6 兼容性宏
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    #define SET_INI_CODEC_UTF8(settings) // Qt6 默认 UTF-8
+#else
+    #define SET_INI_CODEC_UTF8(settings) (settings).setIniCodec("UTF-8")
+#endif
 
 #include "Qsci/qsciapis.h"
 #include "Qsci/qsciscintilla.h"
@@ -907,7 +915,7 @@ const char* QsciLexer::getUserDefineKeywords()
 
 	QString userLangFile = QString("notepad/userlang/%1").arg(m_tagName);//自定义语言中不能有.字符，否则可能有错，后续要检查
 	QSettings qs(QSettings::IniFormat, QSettings::UserScope, userLangFile);
-	qs.setIniCodec("UTF-8");
+	SET_INI_CODEC_UTF8(qs);
 
 	if (!qs.contains("mz"))
 	{

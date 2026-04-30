@@ -787,8 +787,9 @@ bool readBase(const QChar * str, int * value, int base, int size)
 		current = str[i];
 		if (current >= 'A')
 		{
-			current = current.digitValue() & 0xdf;
-			current = current.digitValue() - ('A' - '0' - 10);
+			int digitVal = current.digitValue() & 0xdf;
+			digitVal = digitVal - ('A' - '0' - 10);
+			current = QChar(digitVal + '0');
 		}
 		else if (current > '9')
 			return false;

@@ -201,7 +201,11 @@ protected:
 	void dragLeaveEvent(QDragLeaveEvent* event);
 	bool eventFilter(QObject *watched, QEvent *event)override;
 #ifdef Q_OS_WIN
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	bool nativeEvent(const QByteArray &eventType, void *message, qintptr *result) override;
+#else
 	bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
+#endif
 	bool nativeOpenfile(QString openFilePath);
 #endif
 #ifdef uos

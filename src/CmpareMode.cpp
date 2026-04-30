@@ -1,6 +1,7 @@
 ﻿#include "CmpareMode.h"
 #include "Encode.h"
 #include "rcglobal.h"
+#include "qt6compat.h"
 
 
 #include <QFile>
@@ -280,7 +281,11 @@ quint32 CmpareMode::readLineFromFileWithUnicodeLe(uchar* m_fileFpr, const int fi
 		else if (mode == 2)
 		{
 			QString temp = lineInfo.unicodeStr;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			md4.addData(temp.replace(QRegularExpression("\\s"), QString("")).toUtf8());
+#else
 			md4.addData(temp.replace(QRegExp("\\s"), QString("")).toUtf8());
+#endif
 		}
 	};
 
@@ -528,7 +533,11 @@ CODE_ID CmpareMode::readLineFromFile(uchar* m_fileFpr, const int fileLength, con
 		else if (mode == 2)
 		{
 			QString temp = lineInfo.unicodeStr;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			md4.addData(temp.replace(QRegularExpression("\\s"), QString("")).toUtf8());
+#else
 			md4.addData(temp.replace(QRegExp("\\s"), QString("")).toUtf8());
+#endif
 		}
 	};
 

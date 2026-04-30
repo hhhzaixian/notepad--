@@ -1,4 +1,5 @@
 #include "draglineedit.h"
+#include <QFile>
 
 DragLineEdit::DragLineEdit(QWidget *parent)
 	: QLineEdit(parent)
@@ -12,9 +13,9 @@ DragLineEdit::~DragLineEdit()
 
 void DragLineEdit::dragEnterEvent(QDragEnterEvent* event)
 {
-	if (event->mimeData()->hasFormat("text/uri-list")) //只能打开文本文件
+	if (event->mimeData()->hasFormat("text/uri-list")) //鍙兘鎵撳紑鏂囨湰鏂囦欢
 	{
-		event->accept(); //可以在这个窗口部件上拖放对象
+		event->accept(); //鍙互鍦ㄨ繖涓獥鍙ｉ儴浠朵笂鎷栨斁瀵硅薄
 	}
 	else
 	{
